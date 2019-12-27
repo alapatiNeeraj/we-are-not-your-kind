@@ -1,0 +1,47 @@
+package exceldata;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+
+
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class AnotherExcelPrac {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args)throws IOException{
+		FileInputStream f = new FileInputStream("H:\\Documents\\data backup\\excelprac.xlsx");
+		 XSSFWorkbook x= new XSSFWorkbook(f);
+		 int count = x.getNumberOfSheets();
+		 for ( int i=0; i<count;i++){
+			 if(x.getSheetName(i).equalsIgnoreCase("Sheet1")){
+				 XSSFSheet xs= x.getSheetAt(i);
+				 int rowcount= xs.getLastRowNum()-xs.getFirstRowNum();
+				 for(int j=1;j<rowcount+1;j++){
+				Row r=xs.getRow(j);
+                //Cell c= r.getCell(j);
+               
+                	for(int k=0;k<r.getLastCellNum();k++){
+    					
+						
+    						System.out.println(r.getCell(k).getStringCellValue()+"  ");
+               
+                
+                	
+				
+				}
+				 }
+			 }
+		 }
+		x.close(); 
+	}
+
+}
