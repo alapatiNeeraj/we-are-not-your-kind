@@ -1,0 +1,45 @@
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+
+public class HashMapPractice {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+HashMap<Integer,String> h= new HashMap<Integer,String>();
+h.put(1, "ride the lightning");
+h.put(2,"subliminal verses");
+h.put(3, "master of puppets");
+h.put(4,"meteora");
+
+System.out.println(h.get(1));
+System.out.println(h.remove(2));
+
+for(Entry<Integer, String> m:h.entrySet()){
+	System.out.println(m.getKey()+ "  "+m.getValue());
+	
+}
+System.out.println(h);
+HashMap<Integer, Employee> hm = new HashMap<Integer,Employee>();
+Employee e1= new Employee("corey",25, "QA");
+Employee e2= new Employee("sid",26, "admin");
+Employee e3= new Employee("mick",27, "dev");
+hm.put(1, e1);
+hm.put(2, e2);
+hm.put(3, e3);
+
+for (Entry<Integer,Employee> m1:hm.entrySet() ){
+	int key=m1.getKey();
+	Employee em=m1.getValue();
+	
+	System.out.println("key: "+key);
+	System.out.println(em.name+ " "+em.age+" "+em.dept);
+}
+
+	}
+
+}
