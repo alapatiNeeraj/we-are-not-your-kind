@@ -1,0 +1,102 @@
+package bankwow;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+public class BankWOWESIT2 {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+@Test	
+public void bankwowESIT2() throws IOException, InterruptedException{
+	System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+	WebDriver drive = new InternetExplorerDriver();
+	drive.manage().deleteAllCookies();
+	
+	
+	Properties p = new Properties();
+	FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\BankwowAutomation\\src\\bankwow\\bankwowesit2data.properties");
+p.load(fi);
+drive.manage().window().maximize();
+drive.get(p.getProperty("url"));
+Actions a= new Actions(drive);
+WebDriverWait w = new WebDriverWait(drive, 10);
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Open account']")));
+drive.findElement(By.xpath("//button[text()='Open account']")).click();
+drive.findElement(By.xpath("//input[@id='MobileNumber']")).sendKeys(p.getProperty("mobile"));
+drive.findElement(By.xpath("//input[@id='EmailAddress']")).sendKeys(p.getProperty("email"));
+Select s1 = new Select(drive.findElement(By.id("Title")));
+drive.findElement(By.id("Title")).click();
+s1.selectByVisibleText(p.getProperty("title"));
+drive.findElement(By.xpath("//input[@id='FirstName']")).sendKeys(p.getProperty("firstname"));
+drive.findElement(By.xpath("//input[@id='Surname']")).sendKeys(p.getProperty("lastname"));
+Select s2 = new Select(drive.findElement(By.id("DateOfBirthDay")));
+drive.findElement(By.id("DateOfBirthDay")).click();
+s2.selectByVisibleText(p.getProperty("day"));
+Thread.sleep(1000L);
+Select s3 = new Select(drive.findElement(By.id("DateOfBirthMonth")));
+drive.findElement(By.id("DateOfBirthMonth")).click();
+s3.selectByVisibleText(p.getProperty("month"));
+Thread.sleep(1000L);
+Select s4 = new Select(drive.findElement(By.id("DateOfBirthYear")));
+drive.findElement(By.id("DateOfBirthYear")).click();
+s4.selectByVisibleText(p.getProperty("year"));
+Thread.sleep(1000L);
+Select s5 = new Select(drive.findElement(By.id("EmploymentType")));
+drive.findElement(By.id("EmploymentType")).click();
+s5.selectByVisibleText(p.getProperty("employmenttype"));
+Thread.sleep(2000L);
+drive.findElement(By.id("OccupationType")).sendKeys(p.getProperty("occupationtype"));
+drive.findElement(By.id("OccupationType")).sendKeys(Keys.ENTER);
+drive.findElement(By.id("EnteredAddress")).sendKeys(p.getProperty("address"));
+
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='ng-scope ng-binding']")));
+Thread.sleep(2000L);
+a.moveToElement(drive.findElement(By.xpath("//a[@class='ng-scope ng-binding']"))).click().build().perform();
+//drive.findElement(By.xpath("//a[@class='ng-scope ng-binding']")).sendKeys(Keys.ENTER);
+drive.findElement(By.xpath("//span[text()='No']")).click();
+
+//Thread.sleep(3000L);
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//label[contains(text(),'skip providing ID for now')]")));
+drive.findElement(By.xpath("//label[contains(text(),'skip providing ID for now')]")).click();
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//label[@for='EsaverNo']")));
+drive.findElement(By.xpath("//label[@for='EsaverNo']")).click();
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='btn btn-lg btn-primary col-sm-7 col-md-6 col-xs-12']")));
+drive.findElement(By.xpath("//button[@class='btn btn-lg btn-primary col-sm-7 col-md-6 col-xs-12']")).click();
+w.until(ExpectedConditions.presenceOfElementLocated(By.id("SmsSecurityCode")));
+drive.findElement(By.id("SmsSecurityCode")).sendKeys(p.getProperty("smscode"));
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='btn btn-primary btn-xl col-sm-6 col-md-4 col-xs-12 hidden-xs submit-button']")));
+drive.findElement(By.xpath("//button[@class='btn btn-primary btn-xl col-sm-6 col-md-4 col-xs-12 hidden-xs submit-button']")).click();
+WebDriverWait w1 = new WebDriverWait(drive, 180);
+w1.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//b[@class='ng-binding']")));
+String data=drive.findElement(By.xpath("//b[@class='ng-binding']")).getText();
+System.out.println(" your customer id:"+data);
+drive.get(p.getProperty("solurl"));
+drive.findElement(By.name("username")).sendKeys(p.getProperty("login"));
+drive.findElement(By.name("password")).sendKeys(p.getProperty("password"));
+drive.findElement(By.xpath("//input[@value='Login']")).click();
+w.until(ExpectedConditions.visibilityOfElementLocated(By.id("number")));
+drive.findElement(By.id("number")).sendKeys(data);
+drive.findElement(By.id("searchCustomerButton")).click();
+w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='col-xs-4 text-left ng-binding']")));
+String customer=drive.findElement(By.xpath("//span[@class='col-xs-4 text-left ng-binding']")).getText();
+System.out.println("the customer is created successfully "+customer);
+Thread.sleep(2000L);
+drive.close();
+}
+}
