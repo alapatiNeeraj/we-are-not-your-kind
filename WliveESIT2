@@ -1,0 +1,60 @@
+package wlive;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+public class WliveESIT2 {
+
+	@Test
+	public void wliveEsit2automation() throws IOException{
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		WebDriver drive = new InternetExplorerDriver();
+		drive.manage().deleteAllCookies();
+		
+		
+		Properties p = new Properties();
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\westpacliveautomation\\src\\esit2data.properties");
+		p.load(fi);
+		drive.manage().window().maximize();
+		drive.get(p.getProperty("url"));
+		Actions a =new Actions(drive);
+		drive.findElement(By.id("fakeusername")).sendKeys(p.getProperty("customerid"));
+		drive.findElement(By.id("password")).sendKeys(p.getProperty("password"));
+		drive.findElement(By.id("signin")).click();
+		WebDriverWait w = new WebDriverWait(drive, 20);
+		w.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='btn btn-primary'][contains(text(),'Make a payment')]")));
+		a.moveToElement(drive.findElement(By.xpath("//a[@class='btn btn-primary'][contains(text(),'Make a payment')]"))).click().build().perform();
+		w.until(ExpectedConditions.visibilityOfElementLocated(By.id("Form_PayeeName")));
+		drive.findElement(By.id("Form_PayeeName")).sendKeys(p.getProperty("accountname"));
+		w.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='autosuggest-link Anyone']")));
+		drive.findElement(By.xpath("//a[@class='autosuggest-link Anyone']")).click();
+		w.until(ExpectedConditions.visibilityOfElementLocated(By.id("Form_EftPrn")));
+		drive.findElement(By.id("Form_EftPrn")).sendKeys(p.getProperty("EFT"));
+		Select s2 = new Select(drive.findElement(By.id("Form_FromAccountId")));
+		drive.findElement(By.id("Form_FromAccountId")).click();
+	s2.selectByValue(p.getProperty("fromaccount"));
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.id("Form_Amount")));
+	drive.findElement(By.id("Form_Amount")).sendKeys(p.getProperty("amount"));
+	drive.findElement(By.xpath("//button[@class='btn continue-button confirm-payment-button btn-primary']")).click();
+	w.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='btn confirm-pay confirm-payment-button btn-primary optional']")));
+	drive.findElement(By.xpath("//button[@class='btn confirm-pay confirm-payment-button btn-primary optional']")).click();
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[contains(text(),'Scheduled')]")));
+	String value=drive.findElement(By.xpath("//strong[contains(text(),'Scheduled')]")).getText();
+	System.out.println(value);
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Your payment will be received within our standard ')]")));
+String value1=	drive.findElement(By.xpath("//span[contains(text(),'Your payment will be received within our standard ')]")).getText();
+	System.out.println(value1);
+	drive.close();
+	}
+	
+}
