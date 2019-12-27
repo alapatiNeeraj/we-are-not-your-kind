@@ -1,0 +1,47 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+
+public class DataProviderTest {
+	DataFormatter df= new DataFormatter();
+	@Test(dataProvider="datadriven")
+	public void datatest(String greet,String text, String id){
+		System.out.println(greet+text+id);
+	}
+	
+	@DataProvider(name="datadriven")
+	public Object[][] getdata() throws IOException{
+		//Object[][] data= {{"hello","text",1},{"blacksabbath","text1",2},{"paranoid","text2",3}};
+		//return data;
+		FileInputStream fi= new FileInputStream("H:\\Documents\\data backup\\exceldataprac.xlsx");
+		XSSFWorkbook x= new XSSFWorkbook(fi);
+		XSSFSheet xs=x.getSheetAt(0);
+		int rcount=xs.getPhysicalNumberOfRows();
+		XSSFRow r=xs.getRow(0);
+		int colcount=r.getLastCellNum();
+		Object data[][]= new Object[rcount-1][colcount];
+		for(int i=0;i<rcount-1;i++){
+			r=xs.getRow(i+1);
+			for(int j=0;j<colcount;j++){
+				
+			XSSFCell cell=r.getCell(j);
+			data[i][j]=df.formatCellValue(cell);
+			}
+			
+		}
+		x.close();
+		return data;
+	}
+
+}
+
+
+
