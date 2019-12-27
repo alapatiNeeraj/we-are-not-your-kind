@@ -1,0 +1,81 @@
+package exceldata;
+
+import java.io.FileInputStream;
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class RBSITExcelData {
+	
+	public  ArrayList<String> getdata(String data) throws IOException {
+		
+ArrayList<String> a =new ArrayList<String>();
+		
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\RB SIT.xlsx");
+		XSSFWorkbook xs= new XSSFWorkbook(fi);
+		int count= xs.getNumberOfSheets();
+		for(int i=0;i<count;i++){
+			if(xs.getSheetName(i).equalsIgnoreCase("Sheet1")){
+				XSSFSheet xsheet= xs.getSheetAt(i);
+				Iterator<Row> row = xsheet.iterator();
+				
+				while(row.hasNext()){
+					Row r=row.next();
+					if(r.getCell(0).getStringCellValue().equalsIgnoreCase(data)){
+						Iterator<Cell> c = r.iterator();
+						while(c.hasNext()){
+							Cell ca = c.next();
+							if(ca.getCellTypeEnum()==CellType.STRING){
+						a.add(ca.getStringCellValue());
+							}
+							else{
+								a.add(NumberToTextConverter.toText(ca.getNumericCellValue()));
+							}
+							
+							//System.out.println(a);
+						}
+			
+						
+					
+					}
+						
+					}
+					
+				
+				}
+				
+				
+			}
+		xs.close();
+		return a;
+	
+	}
+	
+
+
+
+}
+	
+	
+
+
+
+
+
+
+
+
+
+
+
