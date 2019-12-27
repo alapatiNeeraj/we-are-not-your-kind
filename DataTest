@@ -1,0 +1,30 @@
+package exceldata;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class DataTest {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+ExcelData ex = new ExcelData();
+ArrayList<String> ar = ex.getdata("user");
+//System.out.println(ar);
+for(int i=1;i<ar.size();i++){
+	System.out.println(ar.get(i));
+	
+}
+
+ArrayList<String> al = ex.getdata("roles");
+
+for(int i=1;i<al.size();i++){
+	System.out.println(al.get(i));
+	
+}
+	}
+
+}
