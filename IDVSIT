@@ -1,0 +1,118 @@
+package sol;
+
+import java.io.FileInputStream;
+import sol.SOLSIT;
+
+import java.io.IOException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+public class IDVSIT extends SOLSIT{
+
+	@Test
+	public void SOLESIT1IDV() throws IOException, InterruptedException{
+	   SOLSIT s= new SOLSIT();
+	  String customer= s.createcustomer(customer1);
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		WebDriver drive = new InternetExplorerDriver();
+		drive.manage().deleteAllCookies();
+		
+		
+		Properties p = new Properties();
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\SOLAutomation\\src\\idvsit.properties");
+		p.load(fi);
+		drive.manage().window().maximize();
+		drive.get(p.getProperty("url"));
+		drive.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		WebDriverWait w = new WebDriverWait(drive, 10);
+		drive.findElement(By.name("username")).sendKeys(p.getProperty("login"));
+		drive.findElement(By.name("password")).sendKeys(p.getProperty("password"));
+		drive.findElement(By.xpath("//input[@value='Login']")).click();
+		//drive.findElement(By.id("number")).sendKeys(p.getProperty("customerno"));
+		//drive.findElement(By.id("searchCustomerButton")).click();
+		w.until(ExpectedConditions.visibilityOfElementLocated(By.id("number")));
+		drive.findElement(By.id("number")).sendKeys(customer);
+		drive.findElement(By.id("searchCustomerButton")).click();
+		//Thread.sleep(5000L);
+		//drive.findElement(By.xpath("//div[@class='row']//div[@class='row']//td[@class='text-right']//span//span[1]")).click();
+		
+		w.until(ExpectedConditions.visibilityOfAllElements(drive.findElement(By.id("customer::identify"))));
+		drive.findElement(By.id("customer::identify")).click();
+	Thread.sleep(2000L);
+	drive.findElement(By.id("Customer")).click();
+		drive.findElement(By.id("PerContinue")).click();
+		drive.findElement(By.id("BROKINGEXCEPT")).click();
+		drive.findElement(By.id("PerContinue")).click();
+		Select s2 = new Select(drive.findElement(By.id("employmentType")));
+		drive.findElement(By.id("employmentType")).click();
+	s2.selectByVisibleText(p.getProperty("employmenttype"));
+	Thread.sleep(5000L);
+	Select s3 = new Select(drive.findElement(By.id("occupationType")));
+	drive.findElement(By.id("occupationType")).click();
+s3.selectByVisibleText(p.getProperty("occupation"));
+Thread.sleep(2000L);
+drive.findElement(By.id("PerContinue")).click();
+Thread.sleep(2000L);
+int a= drive.findElements(By.xpath("/html[1]/body[1]/div[2]/div[1]/div[2]/main[1]/div[1]/section[1]/section[1]/article[1]/form[1]/ul[1]/li")).size();
+for(int i=0; i<a;i++){
+	String b=drive.findElements(By.xpath("//span[@class='truncate']")).get(i).getText();
+	if(b.equalsIgnoreCase(p.getProperty("businessrelationship"))){
+		drive.findElements(By.xpath("//span[@class='truncate']")).get(i).click();
+	}
+	
+	
+}
+
+drive.findElement(By.id("PerContinue")).click();
+Thread.sleep(2000L);
+int c=drive.findElements(By.xpath("//span[@class='truncate']")).size();
+for(int i=0; i<c;i++){
+	String d=drive.findElements(By.xpath("//span[@class='truncate']")).get(i).getText();
+	if(d.equalsIgnoreCase(p.getProperty("sourceoffunds"))){
+		drive.findElements(By.xpath("//span[@class='truncate']")).get(i).click();
+	}
+	
+	
+}	
+
+drive.findElement(By.id("PerContinue")).click();
+Thread.sleep(2000L);
+
+int e=drive.findElements(By.xpath("//span[@class='truncate']")).size();
+for(int i=0; i<e;i++){
+	String f=drive.findElements(By.xpath("//span[@class='truncate']")).get(i).getText();
+	if(f.equalsIgnoreCase(p.getProperty("sourceofwealth"))){
+		drive.findElements(By.xpath("//span[@class='truncate']")).get(i).click();
+	}
+	
+	
+}	
+
+
+drive.findElement(By.id("PerContinue")).click();
+Thread.sleep(2000L);
+drive.findElement(By.xpath("//span[text()='Westpac Broking']")).click();
+
+w.until(ExpectedConditions.elementToBeClickable(drive.findElement(By.xpath("//span[@class='checkboxText ng-binding']"))));
+
+drive.findElement(By.xpath("//span[@class='checkboxText ng-binding']")).click();
+drive.findElement(By.xpath("//a[text()='Save changes']")).click();
+w.until(ExpectedConditions.elementToBeClickable(drive.findElement(By.id("PerContinue"))));
+drive.findElement(By.id("PerContinue")).click();
+drive.findElement(By.id("PerContinue")).click();
+drive.findElement(By.id("PerContinue")).click();
+drive.findElement(By.xpath("//span[contains(@class,'checkboxText')]")).click();
+Thread.sleep(3000L);
+drive.findElement(By.xpath("//a[text()='Complete IDV']")).click();
+
+		
+	}
+}
