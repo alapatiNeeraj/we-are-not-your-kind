@@ -1,0 +1,59 @@
+import java.util.HashMap;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+
+public class DuplicateStrings {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+String names[]={"ironmaiden","metallica","beartooth","ironmaiden","metallica","slipknot","slipknot"};
+for(int i=0;i<names.length;i++){
+	for(int j=i+1;j<names.length;j++){
+		if(names[i].equals(names[j])){
+			System.out.println("duplicate elements:"+names[i]);
+		}
+	}
+}
+
+System.out.println("**********");
+Set<String> s= new HashSet<String>();
+for(String s1:names){
+	if(s.add(s1)==false){
+		System.out.println("duplicate element: " +s1);
+		
+	}
+	
+}
+//System.out.println(s);
+
+System.out.println("*********");
+
+Map<String, Integer> h1= new HashMap<String, Integer>();
+for(String s2:names){
+	Integer c = h1.get(s2);
+	if(c==null){
+		h1.put(s2, 1);
+	}
+	else{
+		h1.put(s2,++c);
+	}
+}
+
+Set<Entry<String,Integer>> s3= h1.entrySet();
+for(Entry<String, Integer> e:s3){
+	if(e.getValue()>1){
+		System.out.println("duplicate elements:" +e.getKey());
+	}
+}
+
+
+	}
+
+}
