@@ -1,0 +1,127 @@
+package sol;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+
+import org.testng.annotations.Test;
+
+public class SOLSIT {
+	public static String customer1;
+	
+	@Test
+	public String createcustomer(String customer1) throws IOException, InterruptedException{
+		
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		WebDriver drive = new InternetExplorerDriver();
+		drive.manage().deleteAllCookies();
+		
+		//Actions a1 = new Actions(drive);
+		Properties p = new Properties();
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\SOLAutomation\\tdata.properties");
+	p.load(fi);
+	drive.manage().window().maximize();
+	drive.get(p.getProperty("url"));
+	WebDriverWait w = new WebDriverWait(drive, 30);
+	drive.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+	drive.findElement(By.name("username")).sendKeys(p.getProperty("login"));
+	drive.findElement(By.name("password")).sendKeys(p.getProperty("password"));
+	drive.findElement(By.xpath("//input[@value='Login']")).click();
+    drive.findElement(By.id("customerTab")).click();
+	drive.findElement(By.name("firstName")).sendKeys(p.getProperty("firstname"));
+	drive.findElement(By.name("lastName")).sendKeys(p.getProperty("familyname"));
+	drive.findElement(By.id("searchCustomerSubmitButton")).click();
+	Thread.sleep(5000L);
+	List<WebElement> cust=drive.findElements(By.xpath("//button[@class='btn btn-primary btn-block add-top-margin']"));
+	if(cust.size()==1 && drive.findElement(By.xpath("//button[@class='btn btn-primary btn-block add-top-margin']")).isDisplayed()){
+		drive.findElements(By.xpath("//button[@class='btn btn-primary btn-block add-top-margin']")).get(0).click();
+
+	
+	}
+	else {
+	//drive.switchTo().frame(0);
+	//a1.moveToElement(drive.findElement(By.xpath("//div[@class='col-xs-3 ng-scope']//a[@class='btn btn-primary btn-block'][contains(text(),'Create Customer')]"))).build().perform();
+		drive.findElement(By.xpath("//article[@class='col-xs-12 center-block content results']//div[@class='row']//a[@class='btn btn-primary btn-block'][contains(text(),'Create Customer')]")).click();
+	}
+	Select s = new Select(drive.findElement(By.id("title")));
+	drive.findElement(By.id("title")).click();
+	s.selectByValue(p.getProperty("title"));	
+	//Thread.sleep(3000L);
+	drive.findElement(By.xpath("//span[text()='No, Not applicable']")).click();
+	
+	//Actions ac = new Actions(drive);
+	//Thread.sleep(2000L);
+	drive.findElement(By.id("dob")).sendKeys(p.getProperty("date"));
+	//ac.moveToElement(drive.findElement(By.id("dob"))).sendKeys(p.getProperty("date")).build().perform();
+	
+	Select s1 = new Select(drive.findElement(By.id("marital-status")));
+	drive.findElement(By.id("marital-status")).click();
+	s1.selectByValue(p.getProperty("maritalstatus"));
+	//Thread.sleep(2000L);
+	drive.findElement(By.name("maintel")).sendKeys(p.getProperty("contactnumber"));
+	drive.findElement(By.id("email")).sendKeys(p.getProperty("emailid"));
+drive.findElement(By.id("ausResident-yes")).click();
+Thread.sleep(2000L);
+drive.findElement(By.id("address")).sendKeys(p.getProperty("addressdetails"));
+//Thread.sleep(5000L);
+//drive.findElement(By.id("address")).sendKeys(Keys.ENTER);
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//ul[@class='typeahead dropdown-menu']//li[@class='active']/a")));
+drive.findElement(By.xpath("//ul[@class='typeahead dropdown-menu']//li[@class='active']/a")).click();
+Thread.sleep(2000L);
+drive.findElement(By.xpath("//button[text()='Create Customer']")).click();
+w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='col-xs-4 text-left ng-binding']")));
+String customer=drive.findElement(By.xpath("//span[@class='col-xs-4 text-left ng-binding']")).getText();
+System.out.println(customer);
+
+  customer1=customer.substring(13);
+System.out.println(customer1);
+
+return customer1;
+
+
+
+
+
+
+	//drive.findElement(By.cssSelector("th[class='datepicker-switch']")).click();
+	//Thread.sleep(2000L);
+	
+	/*while(!drive.findElement(By.cssSelector("th[class='datepicker-switch']")).getText().contains(p.getProperty("year")) && drive.findElement(By.cssSelector("th[class='datepicker-switch']")).getText().contains(p.getProperty("month"))){
+		drive.findElement(By.className("prev")).click();
+		System.out.println(drive.findElement(By.cssSelector("th[class='datepicker-switch']")).getText());
+	}*/
+	
+	/*Thread.sleep(2000L);
+List<WebElement> b= drive.findElements(By.cssSelector("table[class='table-condensed']/thead/tbody/tr/td/span[class='month']"));
+	int count = b.size();
+	
+	for (int i=0;i<count; i++){
+	String c=b.get(i).getText();
+	if(c.equalsIgnoreCase(p.getProperty("month"))){
+		b.get(i).click();
+	}
+	}
+	Thread.sleep(2000L);
+	*/
+	
+	
+	}
+}
