@@ -1,0 +1,31 @@
+import java.util.Enumeration;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+
+public class HashTable {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+Hashtable<String, String> hs = new Hashtable<String,String>();
+hs.put("iowa", "everything ends");
+hs.put("subliminal verses","duality");
+hs.put("master of puppets","disposable heroes");
+System.out.println(hs);
+Enumeration<String> en = hs.keys();
+while(en.hasMoreElements()){
+	String key=en.nextElement();
+	System.out.println(key + " "+ hs.get(key));
+}
+
+		
+	}
+
+}
