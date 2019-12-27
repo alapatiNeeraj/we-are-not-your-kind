@@ -1,0 +1,198 @@
+package rb;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+import exceldata.ExcelData;
+
+public class RBAccessRole {
+
+	@Test
+public void RBAccessthroughIDMSITITstore() throws IOException, InterruptedException{
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		WebDriver drive = new InternetExplorerDriver();
+		drive.manage().deleteAllCookies();
+		
+		
+		Properties p = new Properties();
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\RBAutomation\\src\\SIT ITstore.properties");
+	p.load(fi);
+	drive.manage().window().maximize();
+	drive.get(p.getProperty("url"));
+	Thread.sleep(2000L);
+	drive.switchTo().frame(0);
+	drive.findElement(By.id("Ecom_User_ID")).sendKeys(p.getProperty("username"));
+	drive.findElement(By.id("Ecom_Password")).sendKeys(p.getProperty("password"));
+	drive.findElement(By.id("loginButton2")).click();
+	////div[@class='ng-scope']//div[1]//ul[1]//li[1]//div[1]//a[1]
+	drive.switchTo().defaultContent();
+	
+	//Thread.sleep(8000L);
+	WebDriverWait w = new WebDriverWait(drive, 120);
+	
+	System.out.println(drive.findElements(By.tagName("iframe")).size());
+	
+	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@class='dropdown-toggle ng-binding ng-scope'][contains(text(),'Access')]")));
+	drive.findElement(By.xpath("//a[@class='dropdown-toggle ng-binding ng-scope'][contains(text(),'Access')]")).click();
+	Thread.sleep(2000L);
+	drive.findElement(By.xpath("//a[contains(text(),'Request Access')]")).click();	
+	
+	//html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/landing[1]/section[1]/div[3]/div[1]/ul[1]/li[1]/div[1]/a[1]/div[1]
+	//make-a-request-button
+	//Thread.sleep(4000L);
+	System.out.println(drive.findElements(By.tagName("iframe")).size());
+	Actions a = new Actions(drive);
+	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/requests-content[1]/div[1]/div[1]/section[1]/div[1]/div[1]/button[1]")));
+	drive.findElement(By.xpath("/html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/requests-content[1]/div[1]/div[1]/section[1]/div[1]/div[1]/button[1]")).click();
+	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Others']")));
+	drive.findElement(By.xpath("//span[text()='Others']")).click();
+	drive.findElement(By.xpath("//div[@class='list-view-toggle ng-scope']")).click();
+	ExcelData ex = new ExcelData();
+	ArrayList<String>al= ex.getdata("user");
+	for(int i=1;i<al.size();i++){
+		drive.findElement(By.xpath("//input[@id='dashMemberSearchField_users']")).sendKeys(al.get(i));	
+		//drive.findElement(By.xpath("//span[contains(text(),'Users')]")).click();
+		w.until(ExpectedConditions.elementToBeClickable(By.xpath("//ul[@class='list-selector']//li[@class='ng-scope']//a[@class='ng-binding']")));
+         //Thread.sleep(2000L);
+		a.moveToElement(drive.findElement(By.xpath("//ul[@class='list-selector']//li[@class='ng-scope']//a[@class='ng-binding']"))).build().perform();
+		//Thread.sleep(2000L);
+		drive.findElement(By.xpath("//ul[@class='list-selector']//li[@class='ng-scope']//a[@class='ng-binding']")).click();
+		drive.findElement(By.xpath("//div[@class='list-view-toggle ng-scope expanded']")).click();
+		Thread.sleep(1000L);
+		drive.findElement(By.xpath("//div[@class='list-view-toggle ng-scope']")).click();
+		//drive.findElement(By.xpath("/html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/new-request[1]/div[1]/div[1]/section[1]/div[2]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/data-tag-container[1]/div[1]/data-drop-down[1]/div[1]/div[1]/data-insert-to-list[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/a[1]")).click();
+		//Thread.sleep(2000L);
+		////ul[@class='list-selector']//li[@class='ng-scope']//a[@class='ng-binding']
+		//a.moveToElement(drive.findElement(By.xpath("//input[@id='dashMemberSearchField_users']"))).click().build().perform();
+		//w.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='dashMemberSearchField_users']")));
+		//drive.findElement(By.xpath("//input[@id='dashMemberSearchField_users']")).clear();
+	}
+	
+ArrayList<String> arr=ex.getdata("roles");
+drive.findElement(By.xpath("//input[@id='permissions']")).sendKeys(p.getProperty("role"));
+w.until(ExpectedConditions.elementToBeClickable(By.xpath("//h5[@class='media-heading ng-binding'][contains(text(),'RB-Access-Role')]")));
+//Thread.sleep(15000L);
+int web = drive.findElements(By.xpath("//h5[@class='media-heading ng-binding']")).size();
+for(int i=1;i<arr.size();i++){
+	
+	for(int j=0;j<web;j++){
+		
+		String value=drive.findElements(By.xpath("//h5[@class='media-heading ng-binding']")).get(j).getText();
+		if(value.equalsIgnoreCase(arr.get(i))){
+			//a.moveToElement(drive.findElements(By.xpath("//h5[@class='media-heading ng-binding']")).get(j)).build().perform();
+			
+			drive.findElements(By.xpath("//h5[@class='media-heading ng-binding']")).get(j).click();
+			
+		}
+	}
+
+
+	//drive.findElement(By.xpath("//input[@id='permissions']")).sendKeys(arr.get(i));
+	//w.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='list-item-col']")));
+	//Thread.sleep(4000L);
+	//a.moveToElement(drive.findElement(By.xpath("//div[@class='list-item-col']"))).build().perform();
+	//Thread.sleep(3000L);
+	//drive.findElement(By.xpath("//div[@class='list-item-col']")).click();
+    //Thread.sleep(1000L);
+	//drive.findElement(By.xpath("//div[@class='list-view-toggle ng-scope']")).click();
+    //a.moveToElement(drive.findElement(By.xpath("//input[@id='permissions']"))).click().build().perform();
+    //drive.findElement(By.xpath("//textarea[@id='reasonForRequest']")).click();
+    //drive.findElement(By.xpath("//input[@id='permissions']")).clear();
+    
+    
+    
+}
+	
+	///html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/new-request[1]/div[1]/div[1]/section[1]/div[2]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/data-tag-container[1]/div[1]/data-drop-down[1]/div[1]/div[1]/data-insert-to-list[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/a[1]
+	//drive.findElement(By.xpath("//input[@id='dashMemberSearchField_users']")).sendKeys(Keys.chord(Keys.d,Keys.ENTER));
+	
+	
+	
+	//Thread.sleep(8000L);
+
+	//Thread.sleep(2000L);
+	drive.findElement(By.xpath("//textarea[@id='reasonForRequest']")).sendKeys(p.getProperty("reasonforaccess"));
+	
+	/*Select s = new Select(drive.findElement(By.xpath("//div[@class='calendar left single']//select[@class='monthselect']")));
+	drive.findElement(By.xpath("//div[@class='calendar left single']//select[@class='monthselect']")).click();
+s.selectByVisibleText(p.getProperty("month"));
+Thread.sleep(2000L);
+Select s1 = new Select(drive.findElement(By.xpath("//div[@class='calendar left single']//select[@class='yearselect']")));
+drive.findElement(By.xpath("//div[@class='calendar left single']//select[@class='yearselect']")).click();
+s1.selectByVisibleText(p.getProperty("year"));
+Thread.sleep(2000L);
+int b=drive.findElements(By.id("//td[@class='today active start-date active end-date available']")).size();
+int c=drive.findElements(By.xpath("//td[@class='available']")).size();
+int d=drive.findElements(By.xpath("//td[@class='weekend available']")).size();
+int e=b+c+d;
+System.out.println(e);
+for(int i=0;i<e;i++){
+String f=drive.findElements(By.id("//td[@class='today active start-date active end-date available']")).get(i).getText();
+String g=drive.findElements(By.xpath("//td[@class='available']")).get(i).getText();
+String h=drive.findElements(By.xpath("//td[@class='weekend available']")).get(i).getText();
+if(f.equalsIgnoreCase(p.getProperty("startdate"))){
+	drive.findElements(By.id("//td[@class='today active start-date active end-date available']")).get(i).click();
+	break;
+}
+else if(g.equalsIgnoreCase(p.getProperty("startdate"))){
+	drive.findElements(By.xpath("//td[@class='available']")).get(i).click();
+	break;
+	}
+else if(h.equalsIgnoreCase(p.getProperty("startdate"))){
+	drive.findElements(By.xpath("//td[@class='weekend available']")).get(i).click();
+	break;
+	}
+
+}*/
+	//drive.findElement(By.xpath("/html[1]/body[1]/ui-container[1]/div[1]/div[1]/section[1]/div[1]/ui-content[1]/div[1]/new-request[1]/div[1]/div[1]/section[1]/div[2]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/data-tag-container[1]/div[1]/data-drop-down[1]/div[1]/div[1]/data-insert-to-list[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/a[1]")).click();
+	
+	drive.findElement(By.xpath("//input[@id='effectiveDate']")).sendKeys(p.getProperty("startdate"));
+	Thread.sleep(2000L);
+	drive.findElement(By.xpath("//div[@class='daterangepicker dropdown-menu ltr single opensright show-calendar dropup']//button[@class='applyBtn btn btn-sm btn-success'][contains(text(),'Apply')]")).click();
+	Thread.sleep(1000L);
+	drive.findElement(By.xpath("//div[@class='row ng-scope']//input[@id='expirationDate']")).sendKeys(p.getProperty("enddate"));
+	Thread.sleep(2000L);
+	//a.moveToElement(drive.findElement(By.xpath("/html[1]/body[1]/div[4]/div[3]/div[1]/button[1]"))).build().perform();
+	//w.until(ExpectedConditions.elementToBeClickable(By.xpath("/html[1]/body[1]/div[4]/div[3]/div[1]/button[1]")));
+//drive.findElement(By.xpath("/html[1]/body[1]/div[4]/div[3]/div[1]/button[1]")).click();
+	//Thread.sleep(2000L);
+	a.moveToElement(drive.findElement(By.xpath("//translate[text()='Request']"))).build().perform();
+	drive.findElement(By.xpath("//translate[text()='Request']")).click();
+	Thread.sleep(2000L);
+	//w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='ng-binding'][contains(text(),'Request(s) sent successfully.']")));
+	drive.findElement(By.xpath("//a[contains(text(),'Tasks')]")).click();
+	w.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='table-header-sort ng-binding']")));
+	drive.findElement(By.xpath("//a[@class='table-header-sort ng-binding']")).click();
+	w.until(ExpectedConditions.elementToBeClickable(By.xpath("//th[@class='col-selection']")));
+	//Thread.sleep(5000L);
+
+	System.out.println(drive.findElements(By.tagName("iframe")).size());
+	
+	drive.findElement(By.xpath("//th[@class='col-selection']")).click();
+	drive.findElement(By.xpath("//translate[text()='Approve']")).click();
+	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//form[@class='ng-pristine ng-invalid ng-invalid-required']//input[@id='provide-comment']")));
+	drive.findElement(By.xpath("//form[@class='ng-pristine ng-invalid ng-invalid-required']//input[@id='provide-comment']")).sendKeys(p.getProperty("comment"));
+	drive.findElement(By.xpath("//task-content-bulk-details-table[@class='ng-isolate-scope']//button[@class='btn btn-default ng-binding ng-scope'][contains(text(),'Approve')]")).click();
+	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//translate[text()='No Tasks Found']")));
+	String result=drive.findElement(By.xpath("//translate[text()='No Tasks Found']")).getText();
+	System.out.println(result);
+	System.out.println("the roles have been added and approved successfully");
+	
+}
+
+}
