@@ -1,0 +1,47 @@
+import java.util.Enumeration;
+
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+
+public class HashTablePractice {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Hashtable<Integer, String> hs1 = new Hashtable<Integer,String>();
+		hs1.put(1, "michael");
+		hs1.put(2, "jim");
+		hs1.put(3, "dwight");
+		Hashtable<Integer, String> hs2 = new Hashtable<Integer,String>();
+		hs2=(Hashtable<Integer,String>) hs1.clone();
+		System.out.println(hs1);
+		System.out.println(hs2);
+		hs1.clear();
+		System.out.println(hs1);
+		System.out.println(hs2);
+		Enumeration<String> e = hs2.elements();
+		while(e.hasMoreElements()){
+			System.out.println(e.nextElement());
+		}
+		
+		Set<Entry<Integer, String>> s = hs2.entrySet();
+		System.out.println(s);
+		Iterator<Entry<Integer, String>> it = s.iterator();
+		while(it.hasNext()){
+			Map.Entry<Integer,String> m =(Map.Entry<Integer,String>)it.next();
+			System.out.println(m.getKey());
+			System.out.println(m.getValue());
+		}
+		
+		
+		
+		
+	}
+
+}
