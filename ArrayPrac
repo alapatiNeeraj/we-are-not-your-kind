@@ -1,0 +1,33 @@
+
+public class ArrayPrac {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+int ab[][]={{2,3,5,7,8},{23,45,67,-8,21},{32,43,55,-2,-9}};
+int min=0;
+int mincol=0;
+int k=0;
+for(int i=0;i<3;i++){
+	for(int j=0;j<5;j++){
+		if(ab[i][j]<min){
+			min=ab[i][j];
+			mincol=j;
+		}
+	}
+}
+int max= ab[0][mincol];
+System.out.println(min);
+while(k<3){
+	if(ab[k][mincol]>max){
+		max=ab[k][mincol];
+	}
+	k++;
+}
+System.out.println(max);
+
+	}
+
+}
