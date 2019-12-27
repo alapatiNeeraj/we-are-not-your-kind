@@ -1,0 +1,131 @@
+package tlatlw;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+import org.apache.commons.codec.binary.Base64;
+import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.openqa.selenium.interactions.Actions;
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+
+public class TLASIT {
+	@Test
+	public void tlasitautomation() throws IOException, InterruptedException{
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		InternetExplorerOptions options = new InternetExplorerOptions();
+		//options.enableNativeEvents();
+		options.enablePersistentHovering();
+		options.ignoreZoomSettings();
+		
+		WebDriver drive = new InternetExplorerDriver(options);
+		drive.manage().deleteAllCookies();
+		drive.manage().window().maximize();
+		Properties p = new Properties();
+		FileInputStream f= new FileInputStream("H:\\Documents\\data backup\\Automation\\src\\tlasit.properties");
+		p.load(f);
+		drive.get(p.getProperty("url"));
+		Thread.sleep(2000L);
+		Actions ac= new Actions(drive);
+	byte[] encode1=Base64.encodeBase64(p.getProperty("userid").getBytes());
+	byte[] encode2=Base64.encodeBase64(p.getProperty("password").getBytes());
+	byte[] decode1=Base64.decodeBase64(encode1);
+	byte[] decode2=Base64.decodeBase64(encode2);
+	
+	drive.findElement(By.id("Ecom_User_ID")).sendKeys(new String(decode1));
+		drive.findElement(By.id("Ecom_Password")).sendKeys(new String(decode2));
+		ac.moveToElement(drive.findElement(By.id("loginButton2"))).build().perform();
+		
+		
+		drive.findElement(By.id("loginButton2")).click();
+		
+		
+		WebDriverWait w = new WebDriverWait(drive, 20);
+	  //Thread.sleep(4000L);
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[@id='toolsMenuItem']")));
+		ac.moveToElement(drive.findElement(By.xpath("//td[@id='toolsMenuItem']"))).click().build().perform();
+		w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Setup and Administration']")));
+		ac.moveToElement(drive.findElement(By.xpath("//div[text()='Setup and Administration']"))).build().perform();
+		drive.findElement(By.xpath("//div[text()='Setup and Administration']")).click();
+		//w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'OVERFLOW-X: hidden']")));
+		//drive.findElement(By.xpath("//span[contains(text(),'OVERFLOW-X: hidden']")).click();
+		Thread.sleep(2000L);
+		
+		drive.switchTo().frame("ifMain");
+		ac.moveToElement(drive.findElement(By.xpath("//span[text()='Users & Security']"))).build().perform();
+		Thread.sleep(1000L);
+		drive.findElement(By.xpath("//span[text()='Users & Security']")).click();
+		drive.findElement(By.xpath("//td[@value='users']")).click();
+		//drive.switchTo().defaultContent();
+		
+		drive.switchTo().frame("ifAdmin");
+		/*Thread.sleep(1000L);
+		ac.moveToElement(drive.findElement(By.xpath("//span[text()='Filter']/input[@readOnly='readonly']"))).build().perform();
+		Thread.sleep(1000L);
+		drive.findElement(By.xpath("//span[text()='Filter']/input[@readOnly='readonly']")).click();
+		*/
+		/*w.until(ExpectedConditions.visibilityOfElementLocated(By.id("menu")));
+		ac.moveToElement(drive.findElement(By.id("menu"))).build().perform();
+		Thread.sleep(1000L);
+		ac.moveToElement(drive.findElement(By.xpath("//div[text()='Add New User']"))).build().perform();
+		drive.findElement(By.xpath("//div[text()='Add New User']")).click();*/
+		//Thread.sleep(2000L);
+		//ac.moveToElement(drive.findElement(By.xpath("//input[@value='NONE']"))).build().perform();
+		
+		//Thread.sleep(1000L);
+		//drive.findElement(By.xpath("//input[@value='NONE']")).click();
+		//Select s = new Select(drive.findElement(By.xpath("//img[@src='../Elements/dropdownlist/dropdownbutton.gif']")));
+		//drive.findElement(By.xpath("//img[@src='../Elements/dropdownlist/dropdownbutton.gif']")).click();
+		//WebElement we =drive.findElement(By.xpath("//img[@src='../Elements/dropdownlist/dropdownbutton.gif']"));
+		//WebElement wer =drive.findElement(By.xpath("//input[@value='NONE']"));
+	
+		//Thread.sleep(1000L);
+		//ac.moveToElement(drive.findElement(By.xpath("//input[@value='NONE']"))).build().perform();
+		//Thread.sleep(1000L);
+		/*for(int i=1;i<6;i++){
+		wer.sendKeys(Keys.DOWN);
+		}*/
+		
+		
+		//we.click();
+		//ac.moveToElement(drive.findElement(By.xpath("//input[@value='Name: First']"))).click().build().perform();
+		//Thread.sleep(1000L);
+		//we.click();
+		
+		/*for(int i=0;i<=8;i++){
+			drive.findElement(By.xpath("//img[@src='../Elements/dropdownlist/dropdownbutton.gif']")).sendKeys();
+		}*/
+		//Thread.sleep(1000l);
+		//drive.findElement(By.xpath("//button[text()='E-mail']")).click();*/
+		//drive.findElement(By.xpath("//img[@src='../Elements/dropdownlist/dropdownbutton.gif']")).click();
+		//s.selectByVisibleText("E-mail");
+		ac.moveToElement(drive.findElement(By.id("menu"))).build().perform();
+		//drive.switchTo().frame("ifMain");
+		w.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='Add New User']")));
+		ac.moveToElement(drive.findElement(By.xpath("//div[text()='Add New User']"))).click().build().perform();
+		Thread.sleep(4000L);
+		drive.switchTo().defaultContent();
+		//drive.switchTo().parentFrame();
+		//drive.switchTo().frame(drive.findElement(By.xpath("iframe[@src='../main/blank.htm']")));
+		//drive.switchTo().frame(1);
+		int frames=drive.findElements(By.tagName("iframe")).size();
+		System.out.println(frames);
+		Thread.sleep(2000L);
+		drive.switchTo().parentFrame();
+		w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@dataFld='login']")));
+		drive.findElement(By.xpath("//textarea[@dataFld='login']")).sendKeys("1234");
+		
+	}
+
+}
