@@ -1,0 +1,32 @@
+import java.util.HashMap;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+
+public class MapPractice {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+HashMap<String, String> hs = new HashMap<String, String>();
+hs.put("iowa", "everything ends");
+hs.put("subliminal verses","duality");
+hs.put("master of puppets","disposable heroes");
+System.out.println(hs);
+Set s =hs.entrySet();
+Iterator i = s.iterator();
+
+while(i.hasNext()){
+	Map.Entry ma=(Map.Entry)i.next();
+	System.out.println(ma.getKey());
+	System.out.println(ma.getValue());
+	
+}
+		
+	}
+
+}
