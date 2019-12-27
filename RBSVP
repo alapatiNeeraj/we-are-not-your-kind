@@ -1,0 +1,96 @@
+package rb;
+
+import java.io.FileInputStream;
+import exceldata.RBSVPExcelData;
+
+import java.io.IOException;
+import java.lang.annotation.Documented;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+public class RBSVP {
+
+	@Test
+	public void RBSVPautomation() throws IOException, InterruptedException
+{
+		
+
+		System.setProperty("webdriver.ie.driver","H:\\Documents\\data backup\\IEDriverServer.exe");
+		WebDriver drive = new InternetExplorerDriver();
+		drive.manage().deleteAllCookies();
+		
+		
+		Properties p = new Properties();
+		FileInputStream fi = new FileInputStream("H:\\Documents\\data backup\\RBAutomation\\src\\rbsvp.properties");
+	p.load(fi);//Employees
+	drive.manage().window().maximize();
+	drive.get(p.getProperty("url"));
+	Actions a = new Actions(drive);
+	//drive.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+	drive.findElement(By.id("Ecom_User_ID")).sendKeys(p.getProperty("username"));
+	drive.findElement(By.id("Ecom_Password")).sendKeys(p.getProperty("password"));
+	drive.findElement(By.id("loginButton2")).click();
+	WebDriverWait w = new WebDriverWait(drive, 170);
+	w.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='siebui-icon-tb-sitemap ToolbarButtonOn']")));
+	drive.findElement(By.xpath("//span[@class='siebui-icon-tb-sitemap ToolbarButtonOn']")).click();
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='s_sma95']")));
+	drive.findElement(By.xpath("//a[@id='s_sma95']")).click();
+	w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body/div[@id='_sweclient']/div/div[@id='_swecontent']/div/div[@id='_sweview']/div/div[@id='_svf0']/div/ul[@class='sitemapMain']/li[96]/ul[1]/li[1]/span[1]/a[1]")));
+	drive.findElement(By.xpath("//body/div[@id='_sweclient']/div/div[@id='_swecontent']/div/div[@id='_sweview']/div/div[@id='_svf0']/div/ul[@class='sitemapMain']/li[96]/ul[1]/li[1]/span[1]/a[1]")).click();
+	//Query
+	//w.until(ExpectedConditions.visibilityOfAllElements(drive.findElement(By.xpath("//a[text()='Employees List']"))));
+	//drive.findElement(By.xpath("//a[text()='Employees List']")).click();
+	//w.until(ExpectedConditions.visibilityOfAllElements(drive.findElement(By.xpath("//a[text()='Query']"))));
+	//drive.findElement(By.xpath("//a[text()='Query']")).click(); //Employees List
+	//JavascriptExecutor ja= (JavascriptExecutor)drive;
+	//String s = "return document.getElementById("").value"
+	
+	WebDriverWait w1 = new WebDriverWait(drive, 20);
+	RBSVPExcelData ex = new RBSVPExcelData();
+	ArrayList<String> al = ex.getdata("user");
+	for(int i=1;i<al.size();i++){
+	w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")));
+drive.findElement(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")).click();
+w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//li[@id='ui-id-77']")));
+drive.findElement(By.xpath("//li[@id='ui-id-77']")).click();
+w1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[@id='1_s_1_l_Login_Name']")));
+//Thread.sleep(2000L);
+String s="*";
+a.moveToElement(drive.findElement(By.xpath("//td[@id='1_s_1_l_Login_Name']"))).click().build().perform();
+Thread.sleep(2000L);
+drive.findElement(By.id("1_Login_Name")).sendKeys(s.concat(al.get(i)));
+w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")));
+drive.findElement(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")).click();
+w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//li[@id='ui-id-78']")));
+drive.findElement(By.xpath("//li[@id='ui-id-78']")).click();
+
+if(drive.findElements(By.id("1_Login_Name")).size()==0){
+	System.out.println("The user "+al.get(i)+" is not present in the database");
+}
+else if (drive.findElement(By.id("1_Login_Name")).isDisplayed()){
+w1.until(ExpectedConditions.visibilityOfElementLocated(By.id("1_Login_Name")));
+//a.moveToElement(drive.findElement(By.xpath("//td[@id='1_s_1_l_Login_Name']"))).click().build().perform();
+drive.findElement(By.id("1_Login_Name")).clear();
+drive.findElement(By.id("1_Login_Name")).sendKeys(al.get(i));
+w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")));
+drive.findElement(By.xpath("//span[@class='ui-button-text'][contains(text(),'Query')]")).click();
+w1.until(ExpectedConditions.elementToBeClickable(By.xpath("//li[@id='ui-id-78']")));
+drive.findElement(By.xpath("//li[@id='ui-id-78']")).click();
+System.out.println("The user: "+al.get(i)+" is present in the database");
+}
+	
+	}
+
+}
+	
+}
