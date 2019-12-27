@@ -1,0 +1,47 @@
+package streamprac;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+
+public class StreamPractice {
+	public static void main(String[] args) {
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add("alpha");
+		ar.add("metallica");
+		ar.add("anthrax");
+		ar.add("antimatter");
+		ar.add("halestorm");
+		ar.add("abodminable");
+		ar.add("antartica");
+		ar.add("attila");
+	Long value=	ar.stream().filter(x->x.startsWith("a")).count();
+	System.out.println(value);
+	long d =Stream.of("ironmaiden","antimonitor","neroforte","animosity","solwayfirth").filter(g->g.startsWith("a")
+		
+	).count();
+	System.out.println(d);
+	ar.stream().filter(a->a.length()>5).forEach(a->System.out.println(a));
+	ar.stream().filter(a->a.length()>5).limit(1).forEach(a->System.out.println(a));
+ar.stream().filter(c->c.endsWith("a")).map(c->c.toUpperCase()).forEach(t->System.out.println(t));
+List<String> l=Arrays.asList("ironmaiden","antimonitor","neroforte","animosity","solwayfirth");
+l.stream().filter(v->v.startsWith("a")).map(j->j.toUpperCase()).sorted().forEach(y->System.out.println(y));
+ArrayList<String> arl = new ArrayList<String>();
+arl.add("bring me the horizon");
+arl.add("gojira");
+arl.add("seether");
+arl.add("three days grace");
+Stream<String> s1=Stream.concat(ar.stream(),arl.stream());
+Stream<String> s2=Stream.concat(ar.stream(),arl.stream());
+s1.sorted().map(f->f.toUpperCase()).forEach(h->System.out.println(h));
+boolean flag=s2.anyMatch(r->r.equalsIgnoreCase("seether"));
+System.out.println(flag);
+	}
+	
+	
+	
+                            
+
+}
