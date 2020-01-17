@@ -1,0 +1,91 @@
+Public Sub usersortinput()
+
+Dim userinput As String
+Dim promptmsg As String
+Dim tryagain As Integer
+Dim anothertry As Integer
+
+promptmsg = "enter a numeric value to sort ..... " & vbCrLf & _
+"1-- sort by division" & vbCrLf & _
+"2 -- sort by category" & vbCrLf & _
+"3 -- sort by total" & vbCrLf & _
+"4 -- sort by january"
+
+userinput = InputBox(promptmsg)
+
+If userinput = "1" Then
+DivisionSort
+ElseIf userinput = "2" Then
+CategorySort
+ElseIf userinput = "3" Then
+TotalSort
+ElseIf userinput = "4" Then
+janSort
+Else
+tryagain = MsgBox("invalid value, please try again?", vbYesNo)
+If tryagain = 6 Then
+usersortinput
+Else
+anothertry = MsgBox("have a nice day", vbYesNo)
+If anothertry = 7 Then
+usersortinput
+End If
+
+
+
+
+End If
+
+
+
+End If
+
+
+End Sub
+Sub DivisionSort()
+'
+' Sort List by Division Ascending
+'
+
+Selection.Sort Key1:=Range("A4"), Order1:=xlAscending, Header:=xlGuess, _
+        OrderCustom:=1, MatchCase:=False, Orientation:=xlTopToBottom, _
+        DataOption1:=xlSortNormal
+
+End Sub
+Sub CategorySort()
+'
+' Sort List by Category Ascending
+'
+Selection.Sort Key1:=Range("B4"), Order1:=xlAscending, Header:=xlGuess, _
+        OrderCustom:=1, MatchCase:=False, Orientation:=xlTopToBottom, _
+        DataOption1:=xlSortNormal
+
+End Sub
+Sub TotalSort()
+'
+' Sort List by Total Sales Ascending
+'
+
+'
+    Selection.Sort Key1:=Range("F4"), Order1:=xlAscending, Header:=xlGuess, _
+        OrderCustom:=1, MatchCase:=False, Orientation:=xlTopToBottom, _
+        DataOption1:=xlSortNormal
+
+End Sub
+Sub janSort()
+'
+' Sort List by Total Sales Ascending
+'
+
+'
+    Selection.Sort Key1:=Range("C4"), Order1:=xlAscending, Header:=xlGuess, _
+        OrderCustom:=1, MatchCase:=False, Orientation:=xlTopToBottom, _
+        DataOption1:=xlSortNormal
+
+End Sub
+
+
+
+
+
+
